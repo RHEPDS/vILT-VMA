@@ -2,7 +2,6 @@
 
 Virtual instructor-led training materials and context for the **Virtual Migration Assessment (VMA)** technical workshop: positioning Red Hat **OpenShift Virtualization** as the path from VMware-based infrastructure, and running assessments with partners.
 
-**Related:** [Google Doc (brief)](https://docs.google.com/document/d/1V_kI1_BhjS9CEbnLH5A5qRt0zvSi_-xQzYdcMttv3C8/edit?usp=sharing) · Source export: `VMA_vILT_2026.rtf`
 
 ## Business problem
 
@@ -10,13 +9,13 @@ There is a unique market opportunity for Red Hat to support customers moving fro
 
 ## Audience
 
-- Technical sales / presales  
+- Technical sales/presales  
 - Business consultants  
 - Delivery consultants  
 
 ## Prerequisites
 
-- OpenShift knowledge (e.g. DO180)  
+- OpenShift knowledge (e.g., DO180)  
 - Basic understanding of OpenShift Virtualization  
 - VMware knowledge  
 
@@ -41,6 +40,9 @@ Participants should be able to:
 - Communicate technical value during delivery of the virtualization roadshow  
 
 ## Agenda — Day 1
+
+### you can find a Agenda in your Time Zone here
+### https://rhepds.github.io/vILT-VMA/
 
 | Topic | Duration |
 | --- | --- |
