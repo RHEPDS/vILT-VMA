@@ -1,0 +1,21 @@
+# Optional: requires an Ingress controller (nginx, traefik, etc.)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vmanalytic
+  namespace: vmanalytic
+  labels:
+    app.kubernetes.io/name: vmanalytic
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: vmanalytic.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vmanalytic
+                port:
+                  number: 80

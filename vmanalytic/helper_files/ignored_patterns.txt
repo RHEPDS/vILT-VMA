@@ -1,0 +1,12 @@
+(?i)poweredOn
+(?i)poweredOff
+(?i)virtual\ appliance
+(?i)\*\-template
+(?i)\*_template
+(?i)\*\-tmpl
+(?i)\*_tmpl
+(?i)vRealize\ Operations\ Manager\ Appliance
+(?i)VMware\-Power\-Actions
+(?i)VMware\ vRealize\ Orchestrator\ Appliance
+(?i)Virtual\ Switch\ Update\ Manager
+(?i)ArubaOS

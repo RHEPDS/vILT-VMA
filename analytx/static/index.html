@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="theme-color" content="#e5e5ea" />
+  <title>AnalytiX</title>
+  <style>
+    :root {
+      --bg: #e5e5ea;
+      --bg-elevated: #ffffff;
+      --separator: rgba(60, 60, 67, 0.12);
+      --separator-strong: rgba(60, 60, 67, 0.18);
+      --label-primary: #1c1c1e;
+      --label-secondary: rgba(60, 60, 67, 0.74);
+      --label-tertiary: rgba(60, 60, 67, 0.5);
+      --system-blue: #007aff;
+      --system-blue-pressed: #0066d6;
+      --fill-quaternary: rgba(120, 120, 128, 0.08);
+      --destructive: #ff3b30;
+      --destructive-bg: rgba(255, 59, 48, 0.1);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.06);
+      --font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --mono: ui-monospace, "SF Mono", Menlo, monospace;
+      --ease-out: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --ease-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
+    }
+
+    * { box-sizing: border-box; }
+    html {
+      height: 100%;
+      background: var(--bg);
+    }
+    html, body {
+      min-height: 100%;
+    }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--label-primary);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: max(1.25rem, env(safe-area-inset-top)) max(1.25rem, env(safe-area-inset-right)) max(1.25rem, env(safe-area-inset-bottom)) max(1.25rem, env(safe-area-inset-left));
+    }
+
+    .shell {
+      width: 100%;
+      max-width: 1040px;
+    }
+
+    .card {
+      background: var(--bg-elevated);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      border: 0.5px solid var(--separator);
+      overflow: hidden;
+    }
+
+    .card-inner {
+      padding: 1.5rem 1.35rem 1.35rem;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.15rem;
+    }
+    .lang-switch {
+      display: flex;
+      flex-shrink: 0;
+      padding: 3px;
+      border-radius: 8px;
+      background: var(--fill-quaternary);
+      border: 0.5px solid var(--separator);
+    }
+    .lang-seg {
+      border: none;
+      background: transparent;
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--label-secondary);
+      line-height: 1;
+    }
+    .lang-seg.active {
+      background: var(--bg-elevated);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+      color: var(--label-primary);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0;
+      min-width: 0;
+      flex: 1;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      background: linear-gradient(145deg, #5ac8fa 0%, #007aff 48%, #5856d6 100%);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 122, 255, 0.35);
+    }
+    .brand-icon svg { width: 20px; height: 20px; color: #fff; }
+    .title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin: 0;
+    }
+    .subtitle {
+      margin: 0.65rem 0 0 0;
+      font-size: 0.8125rem;
+      line-height: 1.4;
+      color: var(--label-secondary);
+    }
+
+    .section {
+      margin-top: 1.35rem;
+    }
+
+    label.drop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 120px;
+      padding: 1.1rem;
+      border-radius: var(--radius-md);
+      border: 1.5px dashed var(--separator-strong);
+      background: var(--fill-quaternary);
+      cursor: pointer;
+      transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+    }
+    label.drop:hover,
+    label.drop.drag {
+      border-color: rgba(0, 122, 255, 0.45);
+      background: rgba(0, 122, 255, 0.06);
+    }
+    label.drop.drag { transform: scale(1.01); }
+    .drop-title {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--label-primary);
+    }
+    .drop-hint {
+      margin-top: 0.25rem;
+      font-size: 0.75rem;
+      color: var(--label-tertiary);
+    }
+    .file-name {
+      margin-top: 0.65rem;
+      font-size: 0.75rem;
+      color: var(--label-secondary);
+      text-align: center;
+      word-break: break-all;
+      max-width: 100%;
+      font-family: var(--mono);
+    }
+    input[type="file"] { position: absolute; width: 0; height: 0; opacity: 0; }
+
+    .btn {
+      width: 100%;
+      margin-top: 0.85rem;
+      padding: 0.78rem 1rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: -0.01em;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: background 0.15s var(--ease-out), opacity 0.15s, transform 0.1s var(--ease-out);
+    }
+    .btn:active:not(:disabled) { transform: scale(0.98); }
+    .btn-primary {
+      color: #fff;
+      background: var(--system-blue);
+    }
+    .btn-primary:hover:not(:disabled) { background: var(--system-blue-pressed); }
+    .btn-primary:disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+    }
+    .btn-secondary {
+      margin-top: 0.5rem;
+      color: var(--system-blue);
+      background: transparent;
+      font-weight: 500;
+      font-size: 0.9375rem;
+    }
+    .btn-secondary:hover { background: rgba(0, 122, 255, 0.08); }
+
+    .alert {
+      margin-top: 0.85rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      line-height: 1.35;
+      color: var(--destructive);
+      background: var(--destructive-bg);
+      border: 0.5px solid rgba(255, 59, 48, 0.2);
+      display: none;
+    }
+    .alert.show { display: block; animation: alert-in 0.35s var(--ease-spring); }
+    @keyframes alert-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Thinking / processing */
+    .panel-thinking {
+      display: none;
+      text-align: center;
+      padding: 1.5rem 0.5rem 1rem;
+    }
+    .panel-thinking.show { display: block; animation: panel-fade 0.4s var(--ease-out); }
+    @keyframes panel-fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .mind-wrap {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1rem;
+    }
+    .mind-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2.5px solid rgba(0, 122, 255, 0.15);
+    }
+    .mind-ring-pulse {
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid rgba(0, 122, 255, 0);
+      animation: mind-pulse 1.8s ease-out infinite;
+    }
+    @keyframes mind-pulse {
+      0% { transform: scale(0.85); opacity: 0.8; border-color: rgba(0, 122, 255, 0.35); }
+      70% { transform: scale(1.15); opacity: 0; border-color: rgba(0, 122, 255, 0); }
+      100% { transform: scale(1.15); opacity: 0; }
+    }
+    .mind-core {
+      position: absolute;
+      inset: 12px;
+      border-radius: 50%;
+      background: linear-gradient(160deg, #e8f4ff 0%, #d4e9ff 100%);
+      display: grid;
+      place-items: center;
+      animation: mind-breathe 2.2s ease-in-out infinite;
+    }
+    @keyframes mind-breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    .mind-core svg { width: 28px; height: 28px; color: var(--system-blue); opacity: 0.9; }
+
+    .thinking-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+    .thinking-sub {
+      font-size: 0.8125rem;
+      color: var(--label-secondary);
+      margin-bottom: 0.75rem;
+    }
+    .dots {
+      display: inline-flex;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+    }
+    .dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--system-blue);
+      opacity: 0.35;
+      animation: dot-bounce 1.05s ease-in-out infinite;
+    }
+    .dots span:nth-child(2) { animation-delay: 0.15s; }
+    .dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes dot-bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.35; }
+      40% { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* Result */
+    .panel-result {
+      display: none;
+      padding: 0.25rem 0 0;
+    }
+    .panel-result.show {
+      display: block;
+      animation: result-in 0.5s var(--ease-spring);
+    }
+    @keyframes result-in {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .result-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: rgba(52, 199, 89, 0.12);
+      display: grid;
+      place-items: center;
+      animation: result-pop 0.55s var(--ease-spring) 0.05s both;
+    }
+    @keyframes result-pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .result-icon svg {
+      width: 28px;
+      height: 28px;
+      color: #34c759;
+    }
+    .result-check-draw {
+      stroke-dasharray: 48;
+      stroke-dashoffset: 48;
+      animation: draw-check 0.45s ease forwards 0.2s;
+    }
+    @keyframes draw-check {
+      to { stroke-dashoffset: 0; }
+    }
+    .result-title {
+      text-align: center;
+      font-size: 1.125rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin: 0 0 1rem;
+    }
+    .info-rows {
+      border-radius: var(--radius-md);
+      background: var(--fill-quaternary);
+      border: 0.5px solid var(--separator);
+      overflow: hidden;
+      margin-bottom: 0;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.7rem 0.85rem;
+      font-size: 0.8125rem;
+      border-bottom: 0.5px solid var(--separator);
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: var(--label-tertiary); flex-shrink: 0; }
+    .info-value {
+      color: var(--label-primary);
+      text-align: right;
+      word-break: break-all;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+    }
+
+    .result-outcome {
+      margin-bottom: 0.85rem;
+    }
+    .result-tabs {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 2px;
+      padding: 3px;
+      margin-bottom: 0.65rem;
+      border-radius: 10px;
+      background: var(--fill-quaternary);
+      border: 0.5px solid var(--separator);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+    .result-tab {
+      flex: 0 1 auto;
+      min-width: 5.25rem;
+      max-width: 10rem;
+      border: none;
+      border-radius: 7px;
+      padding: 0.5rem 0.45rem;
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--label-secondary);
+      background: transparent;
+      cursor: pointer;
+      transition: background 0.15s var(--ease-out), color 0.15s var(--ease-out), box-shadow 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .result-tab:hover {
+      color: var(--label-primary);
+    }
+    .result-tab.active {
+      color: var(--label-primary);
+      background: var(--bg-elevated);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    .result-tab:focus-visible {
+      outline: 2px solid var(--system-blue);
+      outline-offset: 2px;
+    }
+    .result-tab-panel {
+      display: none;
+    }
+    .result-tab-panel.active {
+      display: block;
+      animation: panel-fade 0.25s var(--ease-out);
+    }
+
+    .preview-shell {
+      border-radius: var(--radius-md);
+      border: 0.5px solid var(--separator);
+      background: #fff;
+      overflow: auto;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04);
+      max-height: min(52vh, 420px);
+      -webkit-overflow-scrolling: touch;
+    }
+    .outcome-body {
+      padding: 14px 16px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--label-primary);
+    }
+    .outcome-body table {
+      border-collapse: collapse;
+      width: 100%;
+      max-width: 100%;
+      margin: 10px 0;
+      font-size: 12px;
+    }
+    .outcome-body td,
+    .outcome-body th {
+      border: 1px solid rgba(60, 60, 67, 0.22);
+      padding: 6px 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    .outcome-body p {
+      margin: 0.5em 0;
+    }
+    .outcome-body h1,
+    .outcome-body h2,
+    .outcome-body h3,
+    .outcome-body h4 {
+      margin: 1rem 0 0.35rem;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .outcome-body h1 {
+      font-size: 1.2rem;
+    }
+    .outcome-body h2 {
+      font-size: 1.05rem;
+    }
+    .outcome-body h3 {
+      font-size: 0.95rem;
+    }
+    .outcome-body img {
+      max-width: 100%;
+      height: auto;
+    }
+    .outcome-body ul,
+    .outcome-body ol {
+      padding-left: 1.25rem;
+      margin: 0.5em 0;
+    }
+    .preview-fallback {
+      margin: 0;
+      padding: 0.85rem;
+      font-size: 0.8125rem;
+      color: var(--label-secondary);
+      text-align: center;
+      border-radius: var(--radius-md);
+      border: 0.5px dashed var(--separator-strong);
+      background: var(--fill-quaternary);
+    }
+
+    .panel-form.hide { display: none; }
+
+    footer {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.6875rem;
+      color: var(--label-tertiary);
+      line-height: 1.45;
+    }
+    footer > div + div {
+      margin-top: 0.2rem;
+    }
+    footer code {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      background: rgba(120, 120, 128, 0.1);
+      padding: 0.12rem 0.35rem;
+      border-radius: 4px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .mind-ring-pulse, .mind-core, .dots span, .result-check-draw,
+      .panel-thinking.show, .panel-result.show, .alert.show {
+        animation: none !important;
+      }
+      .mind-ring-pulse { display: none; }
+      .dots span { opacity: 1; }
+      .result-check-draw { stroke-dashoffset: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <div class="card-inner">
+        <div class="top-bar">
+          <div class="brand">
+            <div class="brand-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M4 19V5M4 19h16M4 19l4-6 4 3 4-5 4 4" />
+              </svg>
+            </div>
+            <h1 class="title">AnalytiX</h1>
+          </div>
+          <div class="lang-switch" role="group" id="lang-group" aria-label="Language">
+            <button type="button" class="lang-seg" data-lang="en" id="lang-en">EN</button>
+            <button type="button" class="lang-seg" data-lang="de" id="lang-de">DE</button>
+          </div>
+        </div>
+        <p class="subtitle" id="subtitle"></p>
+
+        <div id="panel-form" class="section panel-form">
+          <label class="drop" id="dropzone" for="file">
+            <span class="drop-title" data-i18n="dropTitle"></span>
+            <span class="drop-hint" data-i18n="dropHint"></span>
+            <span class="file-name" id="fname"></span>
+          </label>
+          <input type="file" id="file" accept=".xlsx,.xlsm,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel.sheet.macroEnabled.12" />
+
+          <button type="button" class="btn btn-primary" id="go" disabled data-i18n="btnGenerate"></button>
+          <div class="alert" id="err" role="alert"></div>
+        </div>
+
+        <div id="panel-thinking" class="panel-thinking" aria-live="polite" aria-busy="true">
+          <div class="mind-wrap" aria-hidden="true">
+            <div class="mind-ring"></div>
+            <div class="mind-ring-pulse"></div>
+            <div class="mind-core">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5a3 3 0 1 0-3 3" />
+                <path d="M12 5a3 3 0 1 1 3 3" />
+                <path d="M9 8v4l-2 5h10l-2-5V8" />
+                <path d="M12 12v9" />
+              </svg>
+            </div>
+          </div>
+          <div class="thinking-title" data-i18n="thinkingTitle"></div>
+          <p class="thinking-sub" data-i18n="thinkingSub"></p>
+          <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+        </div>
+
+        <div id="panel-result" class="panel-result">
+          <div class="result-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path class="result-check-draw" d="M6 12l4 4 8-8" />
+            </svg>
+          </div>
+          <h2 class="result-title" data-i18n="resultTitle"></h2>
+          <div class="result-outcome" id="result-outcome">
+            <div class="result-tabs" role="tablist" id="result-tablist" aria-label="">
+              <button
+                type="button"
+                class="result-tab"
+                role="tab"
+                id="tab-details"
+                data-tab-id="details"
+                data-i18n="tabDetails"
+                aria-selected="false"
+                aria-controls="panel-details"
+              ></button>
+            </div>
+            <div id="result-tabpanels">
+              <div
+                id="panel-details"
+                class="result-tab-panel"
+                role="tabpanel"
+                data-tab-id="details"
+                aria-labelledby="tab-details"
+                hidden
+              >
+                <div class="info-rows">
+                  <div class="info-row">
+                    <span class="info-label" data-i18n="labelWordFile"></span>
+                    <span class="info-value" id="out-name">—</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label" data-i18n="labelSize"></span>
+                    <span class="info-value" id="out-size">—</span>
+                  </div>
+                  <div class="info-row">
+                    <span class="info-label" data-i18n="labelSource"></span>
+                    <span class="info-value" id="src-name">—</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary" id="dl" data-i18n="btnDownload"></button>
+          <button type="button" class="btn btn-secondary" id="reset" data-i18n="btnReset"></button>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div>AnalytiX</div>
+      <div><span data-i18n="footerBuild">Build</span> <span id="ver">…</span></div>
+      <div><span data-i18n="footerRunsLocally"></span> <code>127.0.0.1:8765</code></div>
+    </footer>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "analytx-lang";
+
+    const I18N = {
+      en: {
+        pageTitle: "AnalytiX",
+        langAria: "Language",
+        subtitleHtml:
+          'Choose an RVTools export (<code style="font-size:0.75em;">.xlsx</code> / <code style="font-size:0.75em;">.xlsm</code>). The Word report is built locally on this machine.',
+        dropTitle: "Tap to choose a file",
+        dropHint: "or drag and drop here",
+        btnGenerate: "Generate report",
+        thinkingTitle: "Working on it…",
+        thinkingSub: "Reading RVTools sheets and assembling the Word document.",
+        resultTitle: "Report ready",
+        labelWordFile: "Word file",
+        labelSize: "Size",
+        labelSource: "Source",
+        btnDownload: "Download DOCX",
+        btnReset: "New file",
+        footerRunsLocally: "Runs locally at",
+        footerBuild: "Build",
+        bytes: "Bytes",
+        units: ["KB", "MB", "GB"],
+        tabDetails: "Details",
+        tabOverview: "Overview",
+        tabPreview: "Preview",
+        tabTable: "Table {n}",
+        resultTabsAria: "Report sections",
+        previewEmpty:
+          "No preview could be built from the Word file. You can still download the DOCX.",
+      },
+      de: {
+        pageTitle: "AnalytiX",
+        langAria: "Sprache",
+        subtitleHtml:
+          'RVTools-Export wählen (<code style="font-size:0.75em;">.xlsx</code> / <code style="font-size:0.75em;">.xlsm</code>). Der Word-Bericht wird lokal auf diesem Rechner erzeugt.',
+        dropTitle: "Tippen zum Auswählen",
+        dropHint: "oder Datei hierher ziehen",
+        btnGenerate: "Bericht erzeugen",
+        thinkingTitle: "Wird analysiert …",
+        thinkingSub: "RVTools-Tabellen werden gelesen und der Word-Bericht aufgebaut.",
+        resultTitle: "Bericht fertig",
+        labelWordFile: "Word-Datei",
+        labelSize: "Größe",
+        labelSource: "Quelle",
+        btnDownload: "DOCX herunterladen",
+        btnReset: "Neue Datei",
+        footerRunsLocally: "Läuft lokal unter",
+        footerBuild: "Build",
+        bytes: "Bytes",
+        units: ["KB", "MB", "GB"],
+        tabDetails: "Details",
+        tabOverview: "Überblick",
+        tabPreview: "Vorschau",
+        tabTable: "Tabelle {n}",
+        resultTabsAria: "Berichtsbereiche",
+        previewEmpty:
+          "Aus der Word-Datei konnte keine HTML-Vorschau erzeugt werden. Der DOCX-Download steht weiterhin zur Verfügung.",
+      },
+    };
+
+    const fileInput = document.getElementById("file");
+    const goBtn = document.getElementById("go");
+    const fname = document.getElementById("fname");
+    const errBox = document.getElementById("err");
+    const dropzone = document.getElementById("dropzone");
+    const panelForm = document.getElementById("panel-form");
+    const panelThinking = document.getElementById("panel-thinking");
+    const panelResult = document.getElementById("panel-result");
+    const outNameEl = document.getElementById("out-name");
+    const outSizeEl = document.getElementById("out-size");
+    const srcNameEl = document.getElementById("src-name");
+    const dlBtn = document.getElementById("dl");
+    const resetBtn = document.getElementById("reset");
+    const subtitleEl = document.getElementById("subtitle");
+    const langGroup = document.getElementById("lang-group");
+    const resultTablist = document.getElementById("result-tablist");
+    const resultTabpanels = document.getElementById("result-tabpanels");
+    const tabDetails = document.getElementById("tab-details");
+    const panelDetails = document.getElementById("panel-details");
+
+    let currentLang = localStorage.getItem(STORAGE_KEY) || "en";
+    if (currentLang !== "de" && currentLang !== "en") currentLang = "en";
+
+    let selectedFile = null;
+    let resultBlob = null;
+    let resultDownloadName = "";
+    let resultObjectUrl = null;
+
+    function t(key) {
+      const pack = I18N[currentLang] || I18N.en;
+      return pack[key] !== undefined ? pack[key] : I18N.en[key];
+    }
+
+    function applyLang() {
+      document.documentElement.lang = currentLang === "de" ? "de" : "en";
+      localStorage.setItem(STORAGE_KEY, currentLang);
+      document.title = t("pageTitle");
+      langGroup.setAttribute("aria-label", t("langAria"));
+      resultTablist.setAttribute("aria-label", t("resultTabsAria"));
+      subtitleEl.innerHTML = t("subtitleHtml");
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-i18n");
+        if (key && t(key) !== undefined) el.textContent = t(key);
+      });
+
+      document.querySelectorAll(".lang-seg").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-lang") === currentLang);
+      });
+
+      if (resultBlob) {
+        outSizeEl.textContent = formatBytes(resultBlob.size);
+      }
+      refreshDynamicOutcomeTabLabels();
+    }
+
+    function showErr(msg) {
+      errBox.textContent = msg || "";
+      errBox.classList.toggle("show", !!msg);
+    }
+
+    function formatBytes(n) {
+      const loc = currentLang === "de" ? "de-DE" : "en-US";
+      const bytesLabel = t("bytes");
+      const units = t("units");
+      if (n < 1024) return n.toLocaleString(loc) + " " + bytesLabel;
+      let i = -1;
+      do {
+        n /= 1024;
+        i++;
+      } while (n >= 1024 && i < units.length - 1);
+      return (
+        n.toLocaleString(loc, { maximumFractionDigits: n >= 10 ? 0 : 1 }) + " " + units[i]
+      );
+    }
+
+    function setFile(f) {
+      selectedFile = f || null;
+      fname.textContent = selectedFile ? selectedFile.name : "";
+      goBtn.disabled = !selectedFile;
+      showErr("");
+    }
+
+    function clearResult() {
+      if (resultObjectUrl) {
+        URL.revokeObjectURL(resultObjectUrl);
+        resultObjectUrl = null;
+      }
+      resultBlob = null;
+      resultDownloadName = "";
+      clearDynamicOutcomeTabs();
+      setResultTab("details");
+    }
+
+    function base64ToBlob(base64, mime) {
+      const bin = atob(base64);
+      const len = bin.length;
+      const u8 = new Uint8Array(len);
+      for (let i = 0; i < len; i++) u8[i] = bin.charCodeAt(i);
+      return new Blob([u8], { type: mime });
+    }
+
+    function shortTabLabel(text, maxLen) {
+      if (!text) return "";
+      const s = text.replace(/\s+/g, " ").trim();
+      if (s.length <= maxLen) return s;
+      return s.slice(0, Math.max(1, maxLen - 1)) + "…";
+    }
+
+    function titleFromTableEl(table) {
+      if (!table) return null;
+      const cap = table.querySelector("caption");
+      if (cap) {
+        const t = cap.textContent.replace(/\s+/g, " ").trim();
+        if (t) return t;
+      }
+      const firstRow = table.querySelector("tr");
+      if (!firstRow) return null;
+      const ths = firstRow.querySelectorAll("th");
+      if (ths.length > 0) {
+        const parts = Array.from(ths)
+          .map((c) => c.textContent.replace(/\s+/g, " ").trim())
+          .filter(Boolean);
+        if (parts.length === 1) return parts[0];
+        if (parts.length > 1) return parts.slice(0, 5).join(" · ");
+      }
+      const tds = firstRow.querySelectorAll("td");
+      if (tds.length === 1) {
+        const t = tds[0].textContent.replace(/\s+/g, " ").trim();
+        if (t && t.length <= 200) return t;
+      }
+      return null;
+    }
+
+    function titleFromPrecedingHtml(prevHtml) {
+      if (!prevHtml || !prevHtml.trim()) return null;
+      const doc = new DOMParser().parseFromString(
+        '<div id="analytx-prev">' + prevHtml + "</div>",
+        "text/html"
+      );
+      const root = doc.body.querySelector("#analytx-prev");
+      if (!root) return null;
+      for (const sel of ["h1", "h2", "h3", "h4", "h5", "h6"]) {
+        const hs = root.querySelectorAll(sel);
+        if (hs.length) {
+          const t = hs[hs.length - 1].textContent.replace(/\s+/g, " ").trim();
+          if (t) return t;
+        }
+      }
+      const ps = root.querySelectorAll("p");
+      for (let i = ps.length - 1; i >= 0; i--) {
+        const t = ps[i].textContent.replace(/\s+/g, " ").trim();
+        if (!t || t.length > 240) continue;
+        if (ps[i].querySelector("strong, b") || t.length <= 90) return t;
+      }
+      return null;
+    }
+
+    function inferTableTabTitle(tableHtml, precedingHtml) {
+      let table = null;
+      try {
+        const doc = new DOMParser().parseFromString(
+          '<div id="analytx-tw">' + tableHtml + "</div>",
+          "text/html"
+        );
+        table = doc.body.querySelector("#analytx-tw table");
+      } catch (_) {
+        return null;
+      }
+      const fromTable = titleFromTableEl(table);
+      if (fromTable) return fromTable;
+      return titleFromPrecedingHtml(precedingHtml);
+    }
+
+    function partitionMammothHtml(html) {
+      const trimmed = (html || "").trim();
+      if (!trimmed) return { proseHtml: "", tableMetas: [] };
+      try {
+        const doc = new DOMParser().parseFromString(
+          '<div id="analytx-wrap">' + trimmed + "</div>",
+          "text/html"
+        );
+        const wrap = doc.body.querySelector("#analytx-wrap");
+        if (!wrap) return { proseHtml: trimmed, tableMetas: [] };
+
+        const segments = [];
+        function walk(el) {
+          for (const child of el.children) {
+            if (child.tagName === "TABLE") {
+              segments.push({ type: "table", html: child.outerHTML });
+            } else if (child.querySelector && child.querySelector("table")) {
+              walk(child);
+            } else {
+              segments.push({ type: "html", html: child.outerHTML });
+            }
+          }
+        }
+        walk(wrap);
+
+        const proseChunks = [];
+        const tableMetas = [];
+        let lastHtmlBeforeTable = "";
+        for (const s of segments) {
+          if (s.type === "html") {
+            lastHtmlBeforeTable = s.html;
+            proseChunks.push(s.html);
+          } else if (s.type === "table") {
+            const rawTitle = inferTableTabTitle(s.html, lastHtmlBeforeTable);
+            tableMetas.push({
+              html: s.html,
+              tabTitle: rawTitle ? shortTabLabel(rawTitle, 36) : "",
+              tabTooltip: rawTitle || "",
+            });
+          }
+        }
+        return { proseHtml: proseChunks.join(""), tableMetas };
+      } catch (_) {
+        return { proseHtml: trimmed, tableMetas: [] };
+      }
+    }
+
+    function clearDynamicOutcomeTabs() {
+      resultTablist.querySelectorAll('[data-dynamic="1"]').forEach((n) => n.remove());
+      resultTabpanels.querySelectorAll('[data-dynamic="1"]').forEach((n) => n.remove());
+    }
+
+    function createOutcomeShellWithBody(innerHtml) {
+      const shell = document.createElement("div");
+      shell.className = "preview-shell";
+      const body = document.createElement("div");
+      body.className = "outcome-body";
+      body.innerHTML = innerHtml;
+      shell.appendChild(body);
+      return shell;
+    }
+
+    function refreshDynamicOutcomeTabLabels() {
+      resultTablist.querySelectorAll('button[data-dynamic="1"]').forEach((btn) => {
+        const kind = btn.dataset.outcomeKind;
+        const n = btn.dataset.tableN;
+        if (kind === "overview") btn.textContent = t("tabOverview");
+        else if (kind === "full") btn.textContent = t("tabPreview");
+        else if (kind === "empty") btn.textContent = t("tabPreview");
+        else if (kind === "table" && n) {
+          const custom = btn.dataset.tabTitle;
+          if (custom) btn.textContent = custom;
+          else btn.textContent = t("tabTable").replace("{n}", n);
+          const tip = btn.dataset.tabTooltip || "";
+          if (tip) {
+            btn.title = tip.length > 220 ? tip.slice(0, 217) + "…" : tip;
+          } else {
+            btn.removeAttribute("title");
+          }
+        }
+      });
+      const emptyFb = resultTabpanels.querySelector(
+        '[data-tab-id="empty"] .preview-fallback'
+      );
+      if (emptyFb) emptyFb.textContent = t("previewEmpty");
+    }
+
+    function setResultTab(tabId) {
+      resultTablist.querySelectorAll('[role="tab"]').forEach((btn) => {
+        const on = btn.dataset.tabId === tabId;
+        btn.classList.toggle("active", on);
+        btn.setAttribute("aria-selected", String(on));
+      });
+      resultTabpanels.querySelectorAll('[role="tabpanel"]').forEach((pan) => {
+        const on = pan.dataset.tabId === tabId;
+        pan.classList.toggle("active", on);
+        pan.toggleAttribute("hidden", !on);
+      });
+    }
+
+    function renderOutcomeTabs(previewHtml) {
+      clearDynamicOutcomeTabs();
+      const part = partitionMammothHtml(previewHtml);
+      const specs = [];
+
+      if (part.tableMetas.length === 0) {
+        const raw = (previewHtml || "").trim();
+        if (!raw) {
+          specs.push({ id: "empty", kind: "empty", html: "" });
+        } else {
+          specs.push({ id: "full", kind: "full", html: raw });
+        }
+      } else {
+        if (part.proseHtml.trim()) {
+          specs.push({ id: "overview", kind: "overview", html: part.proseHtml });
+        }
+        part.tableMetas.forEach((meta, i) => {
+          specs.push({
+            id: "table-" + i,
+            kind: "table",
+            html: meta.html,
+            tableN: String(i + 1),
+            tabTitle: meta.tabTitle || "",
+            tabTooltip: meta.tabTooltip || "",
+          });
+        });
+      }
+
+      for (const item of specs) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "result-tab";
+        btn.role = "tab";
+        btn.dataset.dynamic = "1";
+        btn.dataset.tabId = item.id;
+        btn.dataset.outcomeKind = item.kind;
+        if (item.tableN) btn.dataset.tableN = item.tableN;
+        if (item.kind === "table") {
+          btn.dataset.tabTitle = item.tabTitle || "";
+          btn.dataset.tabTooltip = item.tabTooltip || "";
+          if (item.tabTooltip) {
+            btn.title =
+              item.tabTooltip.length > 220
+                ? item.tabTooltip.slice(0, 217) + "…"
+                : item.tabTooltip;
+          }
+        }
+        btn.id = "tab-" + item.id;
+        btn.setAttribute("aria-controls", "panel-" + item.id);
+        if (item.kind === "overview") btn.textContent = t("tabOverview");
+        else if (item.kind === "full") btn.textContent = t("tabPreview");
+        else if (item.kind === "empty") btn.textContent = t("tabPreview");
+        else if (item.kind === "table") {
+          btn.textContent =
+            item.tabTitle || t("tabTable").replace("{n}", item.tableN);
+        }
+
+        const pan = document.createElement("div");
+        pan.id = "panel-" + item.id;
+        pan.className = "result-tab-panel";
+        pan.role = "tabpanel";
+        pan.dataset.dynamic = "1";
+        pan.dataset.tabId = item.id;
+        pan.setAttribute("aria-labelledby", "tab-" + item.id);
+        pan.hidden = true;
+
+        if (item.kind === "empty") {
+          const p = document.createElement("p");
+          p.className = "preview-fallback";
+          p.textContent = t("previewEmpty");
+          pan.appendChild(p);
+        } else {
+          pan.appendChild(createOutcomeShellWithBody(item.html));
+        }
+
+        resultTablist.insertBefore(btn, tabDetails);
+        resultTabpanels.insertBefore(pan, panelDetails);
+      }
+
+      let defaultId = "details";
+      if (specs.length) {
+        const first = specs[0];
+        if (first.kind !== "empty") defaultId = first.id;
+      }
+      setResultTab(defaultId);
+    }
+
+    function showForm() {
+      panelThinking.classList.remove("show");
+      panelResult.classList.remove("show");
+      panelForm.classList.remove("hide");
+      panelThinking.setAttribute("aria-busy", "false");
+    }
+
+    function showThinking() {
+      panelForm.classList.add("hide");
+      panelResult.classList.remove("show");
+      panelThinking.classList.add("show");
+      panelThinking.setAttribute("aria-busy", "true");
+    }
+
+    function showResult(payload) {
+      panelThinking.classList.remove("show");
+      panelForm.classList.add("hide");
+      panelThinking.setAttribute("aria-busy", "false");
+      resultBlob = payload.blob;
+      resultDownloadName = payload.downloadName;
+      outNameEl.textContent = payload.downloadName;
+      outSizeEl.textContent = formatBytes(payload.blob.size);
+      srcNameEl.textContent = payload.sourceName;
+      renderOutcomeTabs(payload.previewHtml || "");
+      panelResult.classList.add("show");
+    }
+
+    document.getElementById("lang-en").addEventListener("click", () => {
+      currentLang = "en";
+      applyLang();
+    });
+    document.getElementById("lang-de").addEventListener("click", () => {
+      currentLang = "de";
+      applyLang();
+    });
+
+    resultTablist.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[role='tab'][data-tab-id]");
+      if (!btn) return;
+      setResultTab(btn.dataset.tabId);
+    });
+
+    fileInput.addEventListener("change", () => {
+      setFile(fileInput.files[0]);
+    });
+
+    ["dragenter", "dragover"].forEach((ev) => {
+      dropzone.addEventListener(ev, (e) => {
+        e.preventDefault();
+        dropzone.classList.add("drag");
+      });
+    });
+    dropzone.addEventListener("dragleave", (e) => {
+      const related = e.relatedTarget;
+      if (!related || !dropzone.contains(related)) dropzone.classList.remove("drag");
+    });
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("drag");
+      const f = e.dataTransfer.files[0];
+      if (!f) return;
+      setFile(f);
+    });
+
+    goBtn.addEventListener("click", async () => {
+      const f = selectedFile;
+      if (!f) return;
+      showErr("");
+      clearResult();
+      goBtn.disabled = true;
+      showThinking();
+
+      try {
+        const fd = new FormData();
+        fd.append("file", f, f.name);
+        fd.append("lang", currentLang);
+        const res = await fetch("/api/convert", { method: "POST", body: fd });
+        if (!res.ok) {
+          let detail = res.statusText;
+          try {
+            const j = await res.json();
+            if (j.detail) {
+              detail = typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail);
+            }
+          } catch (_) { /* ignore */ }
+          throw new Error(detail);
+        }
+        const ct = (res.headers.get("content-type") || "").toLowerCase();
+        if (!ct.includes("application/json")) {
+          throw new Error("Unexpected response from server.");
+        }
+        const data = await res.json();
+        if (!data.document_base64) {
+          throw new Error("Invalid server response (missing document).");
+        }
+        const blob = base64ToBlob(
+          data.document_base64,
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        );
+        const dlName =
+          data.filename || f.name.replace(/\.(xlsx|xlsm)$/i, "") + ".docx";
+
+        showResult({
+          blob,
+          downloadName: dlName,
+          sourceName: f.name,
+          previewHtml: data.preview_html || "",
+        });
+      } catch (e) {
+        showForm();
+        showErr(e.message || String(e));
+      } finally {
+        goBtn.disabled = !selectedFile;
+      }
+    });
+
+    dlBtn.addEventListener("click", () => {
+      if (!resultBlob || !resultDownloadName) return;
+      if (resultObjectUrl) URL.revokeObjectURL(resultObjectUrl);
+      resultObjectUrl = URL.createObjectURL(resultBlob);
+      const a = document.createElement("a");
+      a.href = resultObjectUrl;
+      a.download = resultDownloadName;
+      a.rel = "noopener";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      clearResult();
+      setFile(null);
+      fileInput.value = "";
+      showForm();
+    });
+
+    applyLang();
+
+    fetch("/api/version")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        if (j && j.version) document.getElementById("ver").textContent = j.version;
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

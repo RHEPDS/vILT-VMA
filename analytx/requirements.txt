@@ -1,0 +1,7 @@
+pandas
+openpyxl
+python-docx
+fastapi>=0.110
+uvicorn[standard]>=0.27
+python-multipart>=0.0.9
+mammoth>=1.8
