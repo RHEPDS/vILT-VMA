@@ -1,0 +1,33 @@
+^Microsoft Windows 7(?:\s*\(.*\))?$
+^Microsoft Windows Server 2003 Standard(?:\s*\(.*\))?$
+^Microsoft Windows Server 2003(?:\s*\(.*\))?$
+^Other$
+^Other\s+\d+\.\d+.*$
+^Other 3\.x or later Linux(?:\s*\(.*\))?$
+^Other 3\.x Linux(?:\s*\(.*\))?$
+^Other 4\.x or later Linux(?:\s*\(.*\))?$
+^Other 5\.x or later Linux(?:\s*\(.*\))?$
+^VMware Photon OS(?:\s*\(.*\))?$
+^Microsoft Windows Server 2008 R2(?:\s*\(.*\))?$
+^Red Hat Enterprise Linux (4|5|6)(?:\s*\(.*\))?$
+^Debian GNU/Linux (7|8|9|10|11)(?:\s*\(.*\))?$
+^CentOS (4|5|6|7)(?:\s*\(.*\))?$
+^CentOS 4/5/6/7(?:\s*\(.*\))?$
+^CentOS 4/5(?:\s*\(.*\))?$
+^CentOS 4/5/6(?:\s*\(.*\))?$
+^CentOS 4/5 or later(?:\s*\(.*\))?$
+^CentOS Stream 8(?:\s*\(.*\))?$
+^Ubuntu Linux(?:\s*\(.*\))?$
+^Linux \d+\.\d+.*$
+^Amazon Linux 2(?:\s*\(.*\))?$
+^Other Linux(?:\s+.*)?$
+^FreeBSD(?:\s+.*)?$
+^RiOS(?:\s*\(.*\))?$
+^Red Hat Fedora(?:\s*\(.*\))?$
+^SuSE Linux Enterprise (11|12)(?:\s*\(.*\))?$
+^Microsoft\ Windows\ Server\ 2008(?:\s*\(.*\))?$
+^Linux\ 6\.5\.0\-45\-generic\ Appgate\ SDP\ 1\.0\ Appgate\ SDP\ 1\.0(?:\s*\(.*\))?$
+^Other\ 5\.x\ or\ later\ Linux(?:\s*\(.*\))?$
+^Other\ 2\.6\.x\ Linux(?:\s*\(.*\))?$
+^Other\ 4\.x\ Linux(?:\s*\(.*\))?$
+^Other\ 4\.x\ or\ later\ Linux(?:\s*\(.*\))?$
