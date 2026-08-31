@@ -94,6 +94,6 @@ https://rhepds.github.io/vILT-VMA/#/attendee?d=z1.eJylll1v2jAUhv_Kka_DZj4SWO746C
 | Wrap-Up and Closing | 15 min |
 | **Total** | **265 min** |
 
-## Notes
+Feedback Link for this Workshop
 
-This README is based on the source workshop brief document and is intended for internal enablement and planning.
+https://training-lms.redhat.com/sso/saml/auth/rhopen?RelayState=deeplinkoffering%3D93688313
