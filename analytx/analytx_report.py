@@ -284,7 +284,7 @@ def combine_data_sheets(sheets_dict, sheet, debug=False):
         if sheet_name.startswith(sheet + "@") and not df.empty:
             if debug: print("    combineDataSheets() " + sheet + " in " + sheet_name)
             # Concatenate the content of this sheet into the combined DataFrame
-            combined_df = pd.concat([combined_df, df.dropna(axis=1, how='all')])  # dropna to avoid "future warning"
+            combined_df = pd.concat([combined_df, df])
 
     if debug: print("combineDataSheets() adding new " + sheet + " dataframe to cache")
 
@@ -320,19 +320,20 @@ def calculate_percentage(df_dict, sheet, columns, ascending=False, debug=False):
     # validate column...
     if isinstance(columns, list):
         for col in columns:
-            # Prevent crashing due to possible NaN
-            combined_df[col] = combined_df[col].fillna('-')
             if not col in combined_df.columns:
                 print("ERROR calculate_percentage(): column [" + col + "] not found in sheet [" + sheet + "]")
                 return data
             else:
                 if (debug): print("column [" + col + "] found in sheet [" + sheet + "]")
+                # Prevent crashing due to possible NaN
+                combined_df[col] = combined_df[col].fillna('-')
     else:
         if not columns in combined_df.columns:
             print("ERROR calculate_percentage(): column [" + columns + "] not found in sheet [" + sheet + "]")
             return data
         else:
             if (debug): print("column [" + columns + "] found in sheet [" + sheet + "]")
+            combined_df[columns] = combined_df[columns].fillna('-')
 
     # Calculate value counts and percentages
     counts = combined_df[columns].value_counts(dropna=True)  # Not sure if we are loosing some info with dropna=True
@@ -1357,6 +1358,8 @@ def clean_and_fix_data(sheets_dict):
     """
     # remove everything between '(' and ')' in storage Display Name
     vMultiPath_df = combine_data_sheets(sheets_dict, 'vMultiPath')
+    if 'Display_name' not in vMultiPath_df.columns:
+        vMultiPath_df['Display_name'] = '-'
     vMultiPath_df['Display_name'] = vMultiPath_df['Display_name'].str.replace(r'\(.*\)', '', regex=True)
 
     # remove "VMware Virtual Processor" when exist (only few cases)
@@ -1371,7 +1374,9 @@ def clean_and_fix_data(sheets_dict):
 
     for sheet in ["vInfo", "vCPU", "vMemory", "vDisk", "vPartition", "vNetwork"]:
         df = combine_data_sheets(sheets_dict, sheet)
-        df['Annotation'] = df['Annotation'].str.replace('.*@.*.com|.*@.*.es', 'xxx@acme.com', regex=True)
+        if 'Annotation' not in df.columns:
+            continue
+        df['Annotation'] = df['Annotation'].fillna('').astype(str).str.replace('.*@.*.com|.*@.*.es', 'xxx@acme.com', regex=True)
 
     vHBA_df = combine_data_sheets(sheets_dict, 'vHBA')
     vHBA_df.Type = vHBA_df.Type.fillna('-')

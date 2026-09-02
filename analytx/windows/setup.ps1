@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
     Creates a Python venv, installs AnalytiX dependencies, and optionally starts the web app.
@@ -35,7 +35,7 @@ function Get-PythonExe {
     return $null
 }
 
-Write-Host "AnalytiX – Windows setup" -ForegroundColor Cyan
+Write-Host "AnalytiX - Windows setup" -ForegroundColor Cyan
 Write-Host "Project root: $Root"
 
 $pyExe = Get-PythonExe
@@ -94,3 +94,4 @@ Write-Host "Starting AnalytiX: http://127.0.0.1:8765" -ForegroundColor Cyan
 Write-Host "Press Ctrl+C to stop the server."
 Write-Host ""
 & $venvPython $server
+
