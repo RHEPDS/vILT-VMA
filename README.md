@@ -99,4 +99,4 @@ https://rhepds.github.io/vILT-VMA/#/attendee?d=z1.eJyllt1v2jAUxf-VKz-HzSHQQd742o
 
 Feedback Link for this Workshop
 
-https://training-lms.redhat.com/sso/saml/auth/rhopen?RelayState=deeplinkoffering%3D93688313
+https://training-lms.redhat.com/sso/saml/auth/rhopen?RelayState=deeplinkoffering%3D94448483
