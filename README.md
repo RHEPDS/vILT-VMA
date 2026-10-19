@@ -80,7 +80,7 @@ https://rhepds.github.io/vILT-VMA/#/attendee?d=z1.eJyllt1v2jAUxf-VKz-HzSHQQd742o
 - Storage Management
 - Migration from VMware to OpenShift
 
-+ LAB: https://catalog.demo.redhat.com/workshop/yfncjy
++ LAB: https://catalog.demo.redhat.com/workshop/cmk8zs
 + Password: OpenShift
 
 ### Day 2
